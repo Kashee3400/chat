@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!-- Head -->
+    <head>
+        {% load static %}
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1, shrink-to-fit=no, viewport-fit=cover" />
+        <meta name="color-scheme" content="light dark" />
+
+        <title>WannaChat</title>
+
+        <!-- Favicon -->
+        <link rel="shortcut icon" href="{% static 'assets/img/favicon/favicon.ico' %}" type="image/x-icon" />
+        
+        <!-- font awesome -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.5.0/css/all.min.css">
+
+        <!-- Font -->
+        <link rel="preconnect" href="../../../../fonts.gstatic.com/index.html" />
+        <link href="../../../../fonts.googleapis.com/css2f74f.css?family=Roboto:wght@400;500;700" rel="stylesheet" />
+
+        <!-- Template CSS -->
+        <link class="css-lt" rel="stylesheet" href="{% static 'assets/css/template.bundle.css' %}" media="(prefers-color-scheme: light)" />
+        <link class="css-dk" rel="stylesheet" href="{% static 'assets/css/template.dark.bundle.css' %}" media="(prefers-color-scheme: dark)" />
+        <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" />
+
+        <!-- Theme mode -->
+        <script>
+            if (localStorage.getItem("color-scheme")) {
+                let scheme = localStorage.getItem("color-scheme");
+
+                const LTCSS = document.querySelectorAll("link[class=css-lt]");
+                const DKCSS = document.querySelectorAll("link[class=css-dk]");
+
+                [...LTCSS].forEach((link) => {
+                    link.media = scheme === "light" ? "all" : "not all";
+                });
+
+                [...DKCSS].forEach((link) => {
+                    link.media = scheme === "dark" ? "all" : "not all";
+                });
+            }
+        </script>
+    </head>
+
+    <body>
+        <!-- Layout -->
+        <div class="layout overflow-hidden">
+            <!-- Navigation -->
+            {% include "chatroom/navbar.html" %}
+
+            <!-- Chat -->
+            {% include "chatroom/custom_chat.html" %}
+            <!-- Chat -->
+
+            <!-- Chat: Info -->
+            {% include "chatroom/chatinfo.html" %}
+
+            <!-- Chat: Add member -->
+            {% include "chatroom/addmember.html" %}
+            
+        </div>
+        <!-- Layout -->
+
+        {% include "chatroom/modals.html" %}
+
+        <!-- Scripts -->
+        <script src="{% static 'assets/js/vendor.js' %}"></script>
+        <script src="{% static 'assets/js/template.js' %}"></script>
+        <!-- jquery -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js" integrity="sha512-WNLxfP/8cVYL9sj8Jnp6et0BkubLP31jhTG9vhL/F5uEZmg5wEzKoXp1kJslzPQWwPT1eyMiSxlKCgzHLOTOTQ==" crossorigin="anonymous"></script>
+        {{ obj.pk|json_script:"json-roomid" }}
+        {{ obj.created_at|json_script:"created_at" }}
+        {{ request.user.email|json_script:"json-email" }}
+
+        <script>
+            const roomName = JSON.parse(document.getElementById('json-roomid').textContent);
+            const createdAt = JSON.parse(document.getElementById('created_at').textContent);
+            const userName = JSON.parse(document.getElementById('json-email').textContent);
+
+            document.querySelector('#chat-message-submit').onclick = function(e) {
+                e.preventDefault()
+
+                const messageInputDom = document.querySelector('#chat-message-input');
+                const message = messageInputDom.value;
+
+                var data = JSON.stringify({
+                    'message': message,
+                    'email': userName,
+                    'room': roomName,
+                    'date': createdAt
+                })
+                if (window.location.protocol != "https:") {
+                    var chatSocket = new WebSocket('ws://' + window.location.host + '/ws2/' + roomName + '/');
+                } else {
+                    var chatSocket = new WebSocket('wss://' + window.location.host + '/ws2/' + roomName + '/');
+                }
+
+                chatSocket.onmessage = function(e) {
+                    const data = JSON.parse(e.data);
+
+                    if (data.message) {
+                        console.log(createdAt);
+                        console.log(data);
+                        document.querySelector('#chat-messages').innerHTML += (
+                            '<div class="message message-out"> <a href="#" data-bs-toggle="modal" data-bs-target="#modal-profile" class="avatar avatar-responsive"> <img class="avatar-img" src="/static/assets/img/avatars/avatar.png" alt=""> </a> <div class="message-inner"> <div class="message-body"> <div class="message-content"> <div class="message-text"> <p>'+ data.message +'</p> </div> <!-- Dropdown --> <div class="message-action"> <div class="dropdown"> <a class="icon text-muted" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical"> <circle cx="12" cy="12" r="1"></circle> <circle cx="12" cy="5" r="1"></circle> <circle cx="12" cy="19" r="1"></circle> </svg> </a> <ul class="dropdown-menu" style=""> <li> <a class="dropdown-item d-flex align-items-center" href="#"> <span class="me-auto">Edit</span> <div class="icon"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3"> <path d="M12 20h9"></path> <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path> </svg> </div> </a> </li> <li> <a class="dropdown-item d-flex align-items-center" href="#"> <span class="me-auto">Reply</span> <div class="icon"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-corner-up-left"> <polyline points="9 14 4 9 9 4"></polyline> <path d="M20 20v-7a4 4 0 0 0-4-4H4"></path> </svg> </div> </a> </li> <li> <hr class="dropdown-divider"> </li> <li> <a class="dropdown-item d-flex align-items-center text-danger" href="#"> <span class="me-auto">Delete</span> <div class="icon"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"> <polyline points="3 6 5 6 21 6"></polyline> <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path> <line x1="10" y1="11" x2="10" y2="17"></line> <line x1="14" y1="11" x2="14" y2="17"></line> </svg> </div> </a> </li> </ul> </div> </div> </div> </div> <div class="message-footer"> <span class="extra-small text-muted"> </span> </div> </div> </div>' 
+                            + '<br>');
+                    } else {
+                        alert('The message was empty!')
+                    }
+
+                    scrollToBottom();
+                };
+
+                chatSocket.onopen = function () {
+                    chatSocket.send(data);
+                };
+
+                messageInputDom.value = '';
+
+                return false
+            };
+
+            /**
+            * A function for finding the messages element, and scroll to the bottom of it.
+            */
+            function scrollToBottom() {
+                let objDiv = document.getElementById("chat-messages");
+                objDiv.scrollTop = objDiv.scrollHeight;
+            }
+
+            // Add this below the function to trigger the scroll on load.
+            scrollToBottom();
+
+
+            $(document).ready(function () {
+                $(".me-auto").click(function () {
+                    var id = $(this).parent().attr("id");
+                    var url = "{% url 'chatroom:ajax_custom_room' %}"
+                    $.ajax({
+                        url: url,
+                        data: {
+                            'id': id
+                        },
+                        success: function (data) {
+                            alert(data);
+                        }
+                    });
+                })
+            })
+
+        </script>
+    </body>
+</html>

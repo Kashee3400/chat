@@ -1,0 +1,30 @@
+{% load static chat_filters %}
+
+<main class="main is-visible" data-dropzone-area="">
+  <div class="container h-100">
+    <div class="d-flex flex-column h-100 position-relative">
+      <!-- Chat: Header -->
+      {% include 'chatroom/partials/_chat_header.html' %}
+      <!-- Chat: Header -->
+
+      <!-- Chat: Content -->
+      <div class="chat-body hide-scrollbar flex-1 h-100" id="chat-body">
+        <div class="chat-body-inner">
+          <div class="py-6 py-lg-12" id="chat-messages">
+            {% for message in messages %}
+              {% include 'chatroom/partials/_chat_bubble.html' with is_outgoing=request.user.email|is_sender:message.sender_user.email message=message %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      <!-- Chat: Content -->
+
+      <!-- Chat: Footer -->
+      {% url 'chatroom:send_direct_message' obj.id as send_message_url %}
+      {% with chatroom=chatroom url=send_message_url %}
+        {% include 'chatroom/partials/_chat_form.html' %}
+      {% endwith %}
+      <!-- Chat: Footer -->
+    </div>
+  </div>
+</main>

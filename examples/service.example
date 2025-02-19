@@ -1,0 +1,17 @@
+[Unit]
+Description=wannachat-uWSGI-instance
+After=network.target postgresql-13.service
+
+[Service]
+User=centos
+Group=nginx
+WorkingDirectory=/opt/wannachat
+Environment="PATH=/opt/wannachat/venv/bin"
+ExecStart=/opt/wannachat/venv/bin/uwsgi --ini /opt/wannachat/uwsgi/uwsgi.ini
+Restart=always
+KillSignal=SIGQUIT
+Type=notify
+NotifyAccess=all
+
+[Install]
+WantedBy=multi-user.target

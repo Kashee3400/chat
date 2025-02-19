@@ -1,0 +1,75 @@
+{% load static chat_filters %}
+
+<main class="main is-visible" data-dropzone-area="">
+  <div class="container h-100">
+    <div class="d-flex flex-column h-100 position-relative">
+      <!-- Chat: Header -->
+      <div class="chat-header border-bottom py-4 py-lg-7">
+        <div class="row align-items-center">
+          <!-- Mobile: close -->
+          <div class="col-2 d-xl-none">
+            <a class="icon icon-lg text-muted" href="#" data-toggle-chat="">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-left">
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+            </a>
+          </div>
+          <!-- Mobile: close -->
+
+          <!-- Content -->
+          <div class="col-8 col-xl-12">
+            <div class="row align-items-center text-center text-xl-start">
+              <!-- Title -->
+              <div class="col-12 col-xl-6">
+                <div class="row align-items-center gx-5">
+                  <div class="col-auto">
+                    <div class="avatar d-none d-xl-inline-block">
+                      <img class="avatar-img" src="{% static 'logo.jpeg' %}" alt="" />
+                    </div>
+                  </div>
+
+                  <div class="col overflow-hidden">
+                    <h5 class="text-truncate">{{ chatroom.name }}</h5>
+                    <p class="text-truncate">{{ chatroom.current_users }} members, 0 online</p>
+                  </div>
+                </div>
+              </div>
+              <!-- Title -->
+
+              <!-- Toolbar -->
+              <div class="col-xl-6 d-none d-xl-block">
+                <div class="row align-items-center justify-content-end gx-6">
+                  <div class="col-auto">
+                    <a href="" class="icon icon-lg text-muted" data-bs-toggle="offcanvas" data-bs-target="#offcanvas-more-group" aria-controls="offcanvas-more-group"><i class="fa fa-info-circle"></i></a>
+                  </div>
+                </div>
+              </div>
+              <!-- Toolbar -->
+            </div>
+          </div>
+          <!-- Content -->
+        </div>
+      </div>
+      <!-- Chat: Header -->
+
+      <!-- Chat: Content -->
+      <div class="chat-body hide-scrollbar flex-1 h-100">
+        <div class="chat-body-inner">
+          <div class="py-6 py-lg-12" id="chat-messages">
+            {% for message in messages %}
+              {% include 'chatroom/partials/_chat_bubble.html' with is_outgoing=request.user.email|is_sender:message.user.email message=message %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      <!-- Chat: Content -->
+
+      <!-- Chat: Footer -->
+      {% url 'chatroom:send_room_message' as send_message_url %}
+      {% with chatroom=chatroom url=send_message_url %}
+        {% include 'chatroom/partials/_chat_form.html' %}
+      {% endwith %}
+      <!-- Chat: Footer -->
+    </div>
+  </div>
+</main>

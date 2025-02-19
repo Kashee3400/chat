@@ -1,0 +1,25 @@
+[uwsgi]
+# https://docs.djangoproject.com/en/3.1/howto/deployment/wsgi/uwsgi/
+
+# the base directory (full path)
+chdir           = /opt/wannachat
+
+# Django's wsgi file
+module          = wannachat.wsgi
+
+# the virtualenv (full path)
+home            = /opt/wannachat/venv
+
+# process-related settings
+master          = true
+
+# maximum number of worker processes
+processes       = 8
+threads         = 2
+enable-threads  = True
+
+# the socket (use the full path to be safe
+socket          = /opt/wannachat/uwsgi/uwsgi.sock
+
+# ... with appropriate permissions - may be needed
+chmod-socket    = 666
