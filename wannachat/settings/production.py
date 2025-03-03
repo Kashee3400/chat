@@ -28,46 +28,19 @@ if os.getenv('DISABLE_LOGGING', False):  # for celery in jenkins ci only
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
-    "formatters": {
-        "verbose": {
-            "format": "{asctime} {levelname} {module} {process:d} {thread:d} "
-            "{message}",
-            "style": "{",
-        },
-        "simple": {
-            "format": "{asctime} {levelname} {message}",
-            "style": "{",
-        },
-    },  # formatters
+    "filters": {"require_debug_false": {"()": "django.utils.log.RequireDebugFalse"}},
     "handlers": {
-        "console": {
-            "level": "INFO",
-            "class": "logging.StreamHandler",
-            "formatter": "simple",
-        },
-        "file": {
-            "level": "DEBUG",
-            "formatter": "verbose",
-            "class": "logging.handlers.TimedRotatingFileHandler",
-            "filename": os.path.join(LOGS_DIR, "debug.log"),
-            "when": "midnight",
-            "backupCount": 30,
-        },
-    },  # handlers
+        "mail_admins": {
+            "level": "ERROR",
+            "filters": ["require_debug_false"],
+            "class": "django.utils.log.AdminEmailHandler",
+        }
+    },
     "loggers": {
-        "": {  # root logger
-            "handlers": ["console", "file"],
-            "level": os.getenv("DJANGO_LOG_LEVEL", "INFO").upper(),
+        "django.request": {
+            "handlers": ["mail_admins"],
+            "level": "ERROR",
+            "propagate": True,
         },
-        "customauth": {
-            "handlers": ["console", "file"],
-            "level": os.getenv("DJANGO_LOG_LEVEL", "DEBUG").upper(),
-            "propagate": False,  # required to eliminate duplication on root
-        },
-        'app_name': {
-            'handlers': ['console', 'file'],
-            'level': os.getenv('DJANGO_LOG_LEVEL', 'DEBUG').upper(),
-            'propagate': False,  # required to eliminate duplication on root
-        },
-    },  # loggers
-}  # logging
+    },
+}
