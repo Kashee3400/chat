@@ -1,0 +1,28 @@
+{% extends 'chatroom/base_chat.html' %}
+{% load static %}
+
+{% block title %}
+  Direct Chat
+{% endblock %}
+
+{% block extra_css %}
+{% endblock extra_css %}
+{% block chat_layout %}
+  <!-- Chat -->
+  <main id="chat-main" class="main is-visible" data-dropzone-area="">
+    <div class="container h-100 user-chat-container">
+      {% include 'chatroom/one_to_one_chat.html' %}
+    </div>
+  </main>
+
+  <!-- Chat -->
+{% endblock %}
+
+{% block extra_js %}
+  <script>
+    const userEmail = '{{ request.user.email|escapejs }}'
+    var userProfileUrl = '{{ user_profile_url }}'
+    var receiverProfileUrl = '{{ receiver_profile_url }}'
+    const CURRENT_USER_ID = '{{ request.user.pk }}'
+  </script>
+{% endblock %}

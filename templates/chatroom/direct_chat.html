@@ -21,7 +21,7 @@
 
       <!-- Chat: Footer -->
       {% url 'chatroom:send_direct_message' obj.id as send_message_url %}
-      {% with chatroom=chatroom url=send_message_url %}
+      {% with url=send_message_url %}
         {% include 'chatroom/partials/_chat_form.html' %}
       {% endwith %}
       <!-- Chat: Footer -->

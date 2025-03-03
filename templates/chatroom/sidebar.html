@@ -1,302 +1,70 @@
-{% load static i18n %}
+{% load static i18n chat_filters %}
 
 <aside class="sidebar bg-light">
+  <!-- Search -->
+  <div class="px-3 pt-5">
+    {% include 'chatroom/partials/_search_form.html' %}
+  </div>
+  <div id="message-container"></div>
   <div class="tab-content h-100" role="tablist">
-    <div class="tab-pane fade h-100" id="tab-content-friends" role="tabpanel">
-      <div class="d-flex flex-column h-100">
+    
+    <div class="tab-pane fade h-100 show active" id="tab-content-friends" role="tabpanel">
+      <div class="d-flex flex-column h-100 position-relative">
         <div class="hide-scrollbar">
-          <div class="container py-8">
+          <div class="py-2 px-3">
             <!-- Title -->
-            <div class="mb-8">
-              <h2 class="fw-bold m-0">{% trans 'Friends' %}</h2>
+            <div class="mb-4">
+              <h2 class="fw-bold m-0">{% trans "Friends" %}</h2>
             </div>
-
-            <!-- Search -->
-            {% include 'chatroom/partials/_search_form.html' %}
-            <ul class="nav nav-pills nav-justified" role="tablist" style="font-size: 12px;">
+            {% comment %} <ul class="nav nav-pills nav-justified" role="tablist" style="font-size: 12px;">
               <li class="nav-item">
-                <a class="nav-link active" data-bs-toggle="pill" href="#buddies" role="tab" aria-controls="buddies" aria-selected="true">{% trans 'Buddies Online' %}</a>
+                <a class="nav-link active" data-bs-toggle="pill" href="#online" role="tab" aria-controls="online" aria-selected="true">{% trans 'Online' %}</a>
               </li>
-
+    
               <li class="nav-item">
                 <a class="nav-link" data-bs-toggle="pill" href="#offline" role="tab" aria-controls="offline" aria-selected="false">{% trans 'Offline' %}</a>
               </li>
-            </ul>
-
-            <div class="tab-content py-2" role="tablist">
-              <!-- Buddies -->
-              <div class="tab-pane fade show active" id="buddies" role="tabpanel">
-                <div class="card-list">
-                  <!-- Card -->
-                  {% for buddy in buddies %}
-                    <div class="card border-0">
-                      <div class="card-body">
-                        <div class="row align-items-center gx-5">
-                          <div class="col-auto">
-                            <a href="#" class="avatar">
-                              <img class="avatar-img"
-                                src="{% if buddy.friends.profile.avatar %}
-                                  {{ buddy.friends.profile.avatar.url }}
-                                {% else %}
-                                  {% static 'assets/img/avatars/avatar.png' %}
-                                {% endif %}"
-                                alt="" />
-                            </a>
-                          </div>
-
-                          <div class="col">
-                            <h5><a href="{% url 'chatroom:direct_chat' chatroom.pk buddy.friends.pk %}">{{ buddy.friends.profile.name }}</a></h5>
-                            <p>{{ buddy.friends.get_last_message.message }}</p>
-                          </div>
-
-                          <div class="col-auto">
-                            <!-- Dropdown -->
-                            <div class="dropdown">
-                              <a class="icon text-muted" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical">
-                                  <circle cx="12" cy="12" r="1"></circle>
-                                  <circle cx="12" cy="5" r="1"></circle>
-                                  <circle cx="12" cy="19" r="1"></circle>
-                                </svg>
-                              </a>
-
-                              <ul class="dropdown-menu">
-                                <li>
-                                  <a class="dropdown-item" href="{% url 'chatroom:direct_chat' chatroom.pk buddy.friends.pk %}">Send Message</a>
-                                </li>
-                                <li>
-                                  <hr class="dropdown-divider" />
-                                </li>
-                                <li>
-                                  <a class="dropdown-item text-warning" href="#">Report User</a>
-                                </li>
-                                <li>
-                                  <a class="dropdown-item text-danger" href="#">Block User</a>
-                                </li>
-                              </ul>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  {% endfor %}
-                  <!-- Card -->
-                </div>
-              </div>
-              <!-- Members -->
-
-              <!-- offline -->
-              <div class="tab-pane fade show" id="offline" role="tabpanel">
-                <div class="card-list">
-                  <!-- Card -->
-                  <div class="card border-0">
-                    <div class="card-body">
-                      <div class="row align-items-center gx-5">
-                        <div class="col-auto">
-                          <a href="#" class="avatar avatar-online"><span class="avatar-text">D</span></a>
-                        </div>
-
-                        <div class="col">
-                          <h5><a href="#">Offline</a></h5>
-                          <p>offline</p>
-                        </div>
-
-                        <div class="col-auto">
-                          <!-- Dropdown -->
-                          <div class="dropdown">
-                            <a class="icon text-muted" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical">
-                                <circle cx="12" cy="12" r="1"></circle>
-                                <circle cx="12" cy="5" r="1"></circle>
-                                <circle cx="12" cy="19" r="1"></circle>
-                              </svg>
-                            </a>
-
-                            <ul class="dropdown-menu">
-                              <li>
-                                <a class="dropdown-item" href="#">New message</a>
-                              </li>
-                              <li>
-                                <a class="dropdown-item" href="#">Edit contact</a>
-                              </li>
-                              <li>
-                                <hr class="dropdown-divider" />
-                              </li>
-                              <li>
-                                <a class="dropdown-item text-danger" href="#">Block user</a>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- Card -->
-                </div>
-              </div>
-              <!-- Members -->
-            </div>
+            </ul> {% endcomment %}
+            {% comment %} <div class="tab-content py-2" role="tablist"> {% endcomment %}
+              {% comment %} <div class="tab-pane fade show active" id="online" role="tabpanel"> {% endcomment %}
+                {% comment %} {% user_friends %} {% endcomment %}
+              {% comment %} </div> {% endcomment %}
+            {% comment %} </div> {% endcomment %}
+            {% user_friends %}
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Chats -->
-    <div class="tab-pane fade h-100 show active" id="tab-content-chats" role="tabpanel">
+    <!-- Online Users -->
+    <div class="tab-pane fade h-100" id="tab-content-chats" role="tabpanel">
       <div class="d-flex flex-column h-100 position-relative">
         <div class="hide-scrollbar">
-          <div class="container py-8">
+          <div class="py-2 px-3">
             <!-- Title -->
-            <div class="mb-8">
-              <h2 class="fw-bold m-0">{% trans 'Chats' %}</h2>
+            <div class="mb-4">
+              <h2 class="fw-bold m-0">{% trans 'Online Users' %}</h2>
             </div>
-            <!-- Search -->
-            {% include 'chatroom/partials/_search_form.html' %}
             <!-- Chats -->
-            <div class="card-list">
-              {% for member in chatroom.chatroom.all %}
-                <div class="card 
-                {% if member.user.pk == obj.pk %}bg-secondary{% endif %}
-                border-0 p-0">
-                  <!-- Reduced padding and width -->
-                  <div class="card-body py-2 px-3">
-                    <!-- Reduced padding -->
-                    <div class="row align-items-center gx-3">
-                      <!-- Reduced gap between columns -->
-                      <div class="col-auto">
-                        <a href="#" class="avatar">
-                          <img class="avatar-img rounded-circle"
-                            style="width: 40px; height: 40px;"
-                            src="{% if member.user.profile.avatar %}
-                              {{ member.user.profile.avatar.url }}
-                            {% else %}
-                              {% static 'assets/img/avatars/avatar.png' %}
-                            {% endif %}"
-                            alt="" />
-                        </a>
-                      </div>
-                      <div class="col">
-                        <h6 class="mb-0 text-truncate" style="font-size: 14px;">
-                          <a href="{% url 'chatroom:direct_chat' chatroom.pk member.user.pk %}">
-                            {% if request.user.pk == member.user.pk %}
-                              You ({{ member.user.profile.name }})
-                            {% else %}
-                              {{ member.user.profile.name }}
-                            {% endif %}
-                          </a>
-                        </h6>
-                        <p class="text-muted text-truncate mb-0" style="font-size: 12px;">{{ member.get_last_message.message }}</p>
-                      </div>
-                      {% if request.user.pk != member.user.pk %}
-                        <div class="col-auto">
-                          <div class="dropdown">
-                            <a class="icon text-muted small" href="#" role="button" data-bs-toggle="dropdown">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical">
-                                <circle cx="12" cy="12" r="1"></circle>
-                                <circle cx="12" cy="5" r="1"></circle>
-                                <circle cx="12" cy="19" r="1"></circle>
-                              </svg>
-                            </a>
-                            <ul class="dropdown-menu">
-                              <li>
-                                <a class="dropdown-item" href="#">Send Message</a>
-                              </li>
-                              <li>
-                                <a class="dropdown-item" href="{% url 'chatroom:add_friend' member.user.pk %}">Add Friend</a>
-                              </li>
-                              <li>
-                                <hr class="dropdown-divider" />
-                              </li>
-                              <li>
-                                <a class="dropdown-item text-warning" href="#">Report User</a>
-                              </li>
-                              <li>
-                                <a class="dropdown-item text-danger" href="#">Block User</a>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      {% endif %}
-                    </div>
-                  </div>
-                </div>
-              {% endfor %}
-            </div>
+            {% online_users user_id=obj.id %}
             <!-- Chats -->
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Direct Chats -->
+    <!-- friend request -->
     <div class="tab-pane fade h-100" id="tab-content-direct-chats" role="tabpanel">
       <div class="d-flex flex-column h-100 position-relative">
         <div class="hide-scrollbar">
-          <div class="container py-8">
+          <div class="container py-2">
             <!-- Title -->
-            <div class="mb-8">
-              <h2 class="fw-bold m-0">{% trans 'Direct Chats' %}</h2>
+            <div class="mb-4">
+              <h2 class="fw-bold m-0">{% trans "Friend Request" %}</h2>
             </div>
-            <!-- Search -->
-            {% include 'chatroom/partials/_search_form.html' %}
-
-            <!-- Chats -->
-            <div class="card-list">
-              <!-- Card -->
-              {% for user in all_direct_chat %}
-                <div class="card border-0">
-                  <div class="card-body">
-                    <div class="row align-items-center gx-5">
-                      <div class="col-auto">
-                        <a href="#" class="avatar">
-                          <img class="avatar-img"
-                            src="{% if user.profile.avatar %}
-                              {{ user.profile.avatar.url }}
-                            {% else %}
-                              {% static 'assets/img/avatars/avatar.png' %}
-                            {% endif %}"
-                            alt="" />
-                        </a>
-                      </div>
-
-                      <div class="col">
-                        <h5><a href="{% url 'chatroom:direct_chat' chatroom.pk user.pk %}">{{ user.friends.profile.name }}</a></h5>
-                        <p>{{ user.get_last_message.message }}</p>
-                      </div>
-
-                      <div class="col-auto">
-                        <!-- Dropdown -->
-                        <div class="dropdown">
-                          <a class="icon text-muted" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical">
-                              <circle cx="12" cy="12" r="1"></circle>
-                              <circle cx="12" cy="5" r="1"></circle>
-                              <circle cx="12" cy="19" r="1"></circle>
-                            </svg>
-                          </a>
-
-                          <ul class="dropdown-menu" style="">
-                            <li>
-                              <a class="dropdown-item" href="#">Send Message</a>
-                            </li>
-                            <li>
-                              <hr class="dropdown-divider" />
-                            </li>
-                            <li>
-                              <a class="dropdown-item text-warning" href="#">Report User</a>
-                            </li>
-                            <li>
-                              <a class="dropdown-item text-danger" href="#">Block User</a>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              {% endfor %}
-            </div>
-            <!-- Chats -->
+            <!-- Request -->
+            {% friend_request %}
+            <!-- Request -->
           </div>
         </div>
       </div>
@@ -308,8 +76,8 @@
         <div class="hide-scrollbar">
           <div class="container py-8">
             <!-- Title -->
-            <div class="mb-8">
-              <h2 class="fw-bold m-0">{% trans "Notifications" %}</h2>
+            <div class="mb-4">
+              <h2 class="fw-bold m-0">{% trans 'Notifications' %}</h2>
             </div>
 
             <!-- Today -->
@@ -696,7 +464,7 @@
         <div class="hide-scrollbar">
           <div class="container py-8">
             <!-- Title -->
-            <div class="mb-8">
+            <div class="mb-4">
               <h2 class="fw-bold m-0">{% trans 'Settings' %}</h2>
             </div>
 
@@ -807,7 +575,7 @@
             <!-- Security -->
             <div class="mt-8">
               <div class="d-flex align-items-center my-4 px-6">
-                <small class="text-muted me-auto">{% trans "Security" %}</small>
+                <small class="text-muted me-auto">{% trans 'Security' %}</small>
               </div>
 
               <div class="card border-0">
@@ -844,7 +612,7 @@
                               <label for="profile-verify-password">{% trans 'Confirm Password' %}</label>
                             </div>
                           </form>
-                          <button type="button" class="btn btn-block btn-lg btn-primary w-100">{% trans "Save" %}</button>
+                          <button type="button" class="btn btn-block btn-lg btn-primary w-100">{% trans 'Save' %}</button>
                         </div>
                       </div>
                     </div>

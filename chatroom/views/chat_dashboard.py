@@ -3,9 +3,7 @@ from django.views.generic import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-
-from chatroom.models import SubCategory, ChatRoomUser, RoomMessage, DirectMessage, DirectmessageUser
-from customauth.models import User
+from chatroom.models import SubCategory, ChatRoomUser, RoomMessage, DirectMessage, DirectMessageUser
 
 
 class ChatDashboardView(LoginRequiredMixin, View):
@@ -15,7 +13,7 @@ class ChatDashboardView(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         chatrooms = ChatRoomUser.objects.filter(user=request.user)
-        direct_messages = DirectmessageUser.objects.filter(me=request.user)
+        direct_messages = DirectMessageUser.objects.filter(me=request.user)
         context = {
             'user': request.user,
             'direct_messages': direct_messages,

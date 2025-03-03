@@ -1,0 +1,88 @@
+{% load i18n static humanize chat_filters %}
+<!-- Buddies -->
+
+<div class="card-list" id="friends-list">
+  {% get_friends request.user as friends %}
+  {% for friend in friends %}
+  <div class="card border-0 mt-2" style="border-radius: 0%;" id="user_card_{{ friend.pk }}" data-user-id="{{ friend.pk }}">
+    <div class="card-body p-3">
+        <div class="row align-items-center gx-5">
+          <div class="col-auto">
+            <a href="#" class="avatar"><img class="avatar-img" src="{{ friend.avatar }}" alt="Avatar" /></a>
+          </div>
+          <div class="col">
+            <a href="javascript:void(0);" class="read-receipt chat-link" data-slug="{{ friend.slug }}">
+              <h5>{{ friend.name }}</h5>
+              <p id="friend-last-message-{{friend.pk}}">{{ friend.last_message }}</p>
+            </a>
+          </div>
+          <div class="col-auto text-center">
+            <!-- Unread Badge -->
+            <span id="friend-unread-badge-{{ friend.pk }}" 
+                  class="badge bg-success text-white rounded-circle d-flex align-items-center justify-content-center" 
+                  style="width: 20px; height: 20px; font-size: 12px; display: none;">
+                  0
+            </span>
+            <!-- Timestamp -->
+            <small id="friend-last-message-time-{{friend.pk}}" class="text-muted d-block">
+                {{ friend.last_message_time }}
+            </small>
+        </div>
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <p>No friends found.</p>
+  {% endfor %}
+</div>
+<!-- offline -->
+{% comment %} <div class="tab-pane fade show" id="offline" role="tabpanel">
+  <div class="card-list">
+    <!-- Card -->
+    <div class="card border-0">
+      <div class="card-body">
+        <div class="row align-items-center gx-5">
+          <div class="col-auto">
+            <a href="#" class="avatar avatar-offline"><span class="avatar-text">D</span></a>
+          </div>
+
+          <div class="col">
+            <h5><a href="#">Offline</a></h5>
+            <p>offline</p>
+          </div>
+
+          <div class="col-auto">
+            <span id="unread-badge-{{ user.pk }}" class="badge bg-success text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 20px; height: 20px; font-size: 12px; display: none;">0</span>
+            <!-- Dropdown -->
+            <div class="dropdown">
+              <a class="icon text-muted" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical">
+                  <circle cx="12" cy="12" r="1"></circle>
+                  <circle cx="12" cy="5" r="1"></circle>
+                  <circle cx="12" cy="19" r="1"></circle>
+                </svg>
+              </a>
+
+              <ul class="dropdown-menu">
+                <li>
+                  <a class="dropdown-item" href="#">New message</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#">Edit contact</a>
+                </li>
+                <li>
+                  <hr class="dropdown-divider" />
+                </li>
+                <li>
+                  <a class="dropdown-item text-danger" href="#">Block user</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Card -->
+  </div>
+</div> {% endcomment %}
+<!-- Members -->

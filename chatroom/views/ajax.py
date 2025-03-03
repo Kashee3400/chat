@@ -1,6 +1,6 @@
 from django.shortcuts import HttpResponse
 from customauth.models import User
-from chatroom.models.category import DirectmessageUser
+from chatroom.models.category import DirectMessageUser
 
 
 def ajax_custom_room(request):
@@ -8,11 +8,11 @@ def ajax_custom_room(request):
     data = data.split(' ')
     user = User.objects.get(pk=data[0])
     try:
-        custom = DirectmessageUser.objects.get(
+        custom = DirectMessageUser.objects.get(
             friends=user, me=request.user
         )
     except Exception as e:
-        custom = DirectmessageUser.objects.create(
+        custom = DirectMessageUser.objects.create(
             friends=user, friend_type='buddies', me=request.user
         )
     return HttpResponse(user.pk)

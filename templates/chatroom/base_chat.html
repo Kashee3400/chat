@@ -1,3 +1,4 @@
+{% load static i18n chat_filters %}
 <!DOCTYPE html>
 <html lang="en">
   <!-- Head -->
@@ -9,6 +10,7 @@
 
     <title>
       {% block title %}
+
       {% endblock %}
     </title>
 
@@ -17,7 +19,8 @@
 
     <!-- font awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.5.0/css/all.min.css" />
-
+    {% block extra_css %}
+    {% endblock extra_css %}
     <!-- Template CSS -->
     <link class="css-lt" rel="stylesheet" href="{% static 'assets/css/template.bundle.css' %}" media="(prefers-color-scheme: light)" />
     <link class="css-dk" rel="stylesheet" href="{% static 'assets/css/template.dark.bundle.css' %}" media="(prefers-color-scheme: dark)" />
@@ -34,7 +37,6 @@
         ;[...LTCSS].forEach((link) => {
           link.media = scheme === 'light' ? 'all' : 'not all'
         })
-      
         ;[...DKCSS].forEach((link) => {
           link.media = scheme === 'dark' ? 'all' : 'not all'
         })
@@ -46,7 +48,7 @@
     <!-- Layout -->
     <div class="layout overflow-hidden">
       <!-- Navigation -->
-      {% include 'chatroom/navbar.html' %}
+      {% load_navbar %}
 
       <!-- Navigation -->
 
@@ -56,7 +58,7 @@
 
       {% block chat_layout %}
         <!-- Chat -->
-        {% include 'chatroom/chat.html' %}
+
         <!-- Chat -->
       {% endblock %}
     </div>
@@ -75,5 +77,19 @@
     {{ request.user.email|json_script:'json-email' }}
     {% block extra_js %}
     {% endblock %}
+    <script src="{% static 'chat/chat.js' %}"></script>
+    <script src="{% static 'chat/friends.js' %}"></script>
+    <script>
+      document.getElementById("toggle-chat").addEventListener("click", function () {
+        console.log("Toggle chat");
+        let mainElement = document.getElementById("chat-main");
+    
+        if (mainElement.classList.contains("is-visible")) {
+            mainElement.classList.remove("is-visible");
+        } else {
+            mainElement.classList.add("is-visible");
+        }
+    });    
+    </script>
   </body>
 </html>

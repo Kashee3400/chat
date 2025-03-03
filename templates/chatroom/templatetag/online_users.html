@@ -1,0 +1,64 @@
+{% load i18n static chat_filters %}
+
+<div class="card-list" id="online-users">
+  {% for user in online_users %}
+    <div class="card border-0 mt-2 {% if user_id == user.pk %} bg-secondary {% endif %}" data-user-id="{{ user.pk }}">
+      <!-- Add data-user-id for JavaScript -->
+
+      <div class="card-body py-3 mt-0">
+        <div class="row align-items-center gx-5">
+          <div class="col-auto">
+            <a href="#" class="avatar">
+              <img class="avatar-img"
+                src="{% if user.profile.avatar %}
+                  {{ user.profile.avatar.url }}
+                {% else %}
+                  {% static 'assets/img/avatars/avatar.png' %}
+                {% endif %}"
+                alt="User Avatar" />
+            </a>
+          </div>
+
+          <div class="col">
+            {% comment %} <a href="{% url 'chatroom:direct_chatting' user.profile.slug %}"> {% endcomment %}
+            <a href="javascript:void(0);">
+              <h5>{{ user.profile.name }}</h5>
+              <p id="last-message-{{ user.pk }}">{{ user.get_last_message.message }}</p>
+            </a>
+          </div>
+
+          <div class="col-auto d-flex align-items-center justify-content-center">
+            <!-- Unread Message Badge -->
+            <span id="unread-badge-{{ user.pk }}" class="badge bg-success text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 20px; height: 20px; font-size: 12px; display: none;">0</span>
+
+            <!-- Dropdown -->
+            <div class="dropdown">
+              <a class="icon text-muted" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical">
+                  <circle cx="12" cy="12" r="1"></circle>
+                  <circle cx="12" cy="5" r="1"></circle>
+                  <circle cx="12" cy="19" r="1"></circle>
+                </svg>
+              </a>
+
+              <ul class="dropdown-menu">
+                <li>
+                  <button class="dropdown-item send-request-btn" data-receiver-id="{{ user.pk }}">{% trans 'Send Request' %}</button>
+                </li>
+                <li>
+                  <hr class="dropdown-divider" />
+                </li>
+                <li>
+                  <button class="dropdown-item text-warning" data-receiver-id="{{ user.pk }}">{% trans 'Report User' %}</button>
+                </li>
+                <li>
+                  <button class="dropdown-item text-danger" data-receiver-id="{{ user.pk }}">{% trans 'Block User' %}</button>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>

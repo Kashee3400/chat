@@ -4,13 +4,14 @@ from django.views.generic import View
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.sites.models import Site
+from django.contrib.auth import get_user_model
 
-from customauth.models import User
 from customauth.forms import LoginForm, SignUpForm
 from customauth.sent_mail import send_mail_to_user
 from django.contrib import messages
 from django.db.models import Q
 
+User = get_user_model()
 logger = logging.getLogger(__name__)
 
 
@@ -33,13 +34,13 @@ class UserRegistrationView(LoginView):
             name = form.cleaned_data['name']
             username = form.cleaned_data['username']
             gender = request.POST.get('gender')
-            country = form.cleaned_data['country']
-            state = form.cleaned_data['state']
-            email = form.cleaned_data['email']
-            password = form.cleaned_data['password']
-            confirm_password = form.cleaned_data['confirm_password']
             if gender:
+                password = form.cleaned_data['password']
+                confirm_password = form.cleaned_data['confirm_password']
                 if password == confirm_password:
+                    country = form.cleaned_data['country']
+                    state = form.cleaned_data['state']
+                    email = form.cleaned_data['email']
                     try:
                         user = User.objects.create_user(
                             email=email,
@@ -72,7 +73,6 @@ class UserRegistrationView(LoginView):
             else:
                 message = 'Please select gender.'
         else:
-            print(form.errors)
             logger.error(f'Invalid form data: {form.errors}')
             message = f"{form.errors}"
         context = {

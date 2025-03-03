@@ -1,175 +1,128 @@
-<!DOCTYPE html>
-<html lang="en">
-    {% load static %}
-    <!-- Head -->
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1, shrink-to-fit=no, viewport-fit=cover" />
-        <meta name="color-scheme" content="light dark" />
+{% extends 'customauth/base.html' %}
+{% load i18n static %}
 
-        <title>Signup | WannaChat</title>
+{% block title %}
+  {% trans 'Signup :: AcharyaJi' %}
+{% endblock %}
 
-        <!-- Favicon -->
-        <link rel="shortcut icon" href="assets/img/favicon/favicon.ico" type="image/x-icon" />
+{% block content %}
+  <div class="row align-items-center justify-content-center min-vh-100 gx-0">
+    <div class="col-12 col-md-6 col-lg-6">
+      <div class="card card-shadow border-0">
+        <div class="card-body">
+          <form action="" method="post" id="registerForm" data-state-url="{% url 'customauth:load_state' %}">
+            {% csrf_token %}
+            <div class="row g-3">
+              <div class="col-12 text-center">
+                <h2 class="fw-bold mb-2"><a href="{% url 'home' %}">{% trans "Talk AcharyaJi" %}</a></h2>
+                <hr />
+                <h3 class="fw-bold mb-2">{% trans "Sign Up" %}</h3>
+                <p>{% trans "Follow the easy steps" %}</p>
+                <b class="text-danger">{{ message }}</b>
+              </div>
 
-        <!-- Font -->
-        <link rel="preconnect" href="../../../../fonts.gstatic.com/index.html" />
-        <link href="../../../../fonts.googleapis.com/css2f74f.css?family=Roboto:wght@400;500;700" rel="stylesheet" />
-
-        <!-- Template CSS -->
-        <link class="css-lt" rel="stylesheet" href="{% static 'assets/css/template.bundle.css' %}" media="(prefers-color-scheme: light)" />
-        <link class="css-dk" rel="stylesheet" href="{% static 'assets/css/template.dark.bundle.css' %}" media="(prefers-color-scheme: dark)" />
-
-        <!-- Theme mode -->
-        <script>
-            if (localStorage.getItem("color-scheme")) {
-                let scheme = localStorage.getItem("color-scheme");
-
-                const LTCSS = document.querySelectorAll("link[class=css-lt]");
-                const DKCSS = document.querySelectorAll("link[class=css-dk]");
-
-                [...LTCSS].forEach((link) => {
-                    link.media = scheme === "light" ? "all" : "not all";
-                });
-
-                [...DKCSS].forEach((link) => {
-                    link.media = scheme === "dark" ? "all" : "not all";
-                });
-            }
-        </script>
-    </head>
-
-    <body class="bg-light">
-        <div class="container">
-            <div class="row align-items-center justify-content-center min-vh-100 gx-0">
-                <div class="col-12 col-md-6 col-lg-6">
-                    <div class="card card-shadow border-0">
-                        <div class="card-body">
-                            <form action="" method="post" id="registerForm" data-state-url="{% url 'customauth:load_state' %}">
-                                {% csrf_token %}
-                                <div class="row g-6">
-                                    <div class="col-12">
-                                        <div class="text-center">
-                                            <h2 class="fw-bold mb-2">
-                                                <a href="{% url 'home' %}">WannaChat</a>
-                                            </h2>
-                                            <hr>
-                                        </div>
-                                    </div>
-    
-                                    <div class="col-12">
-                                        <div class="text-center">
-                                            <h3 class="fw-bold mb-2">Sign Up</h3>
-                                            <p>Follow the easy steps</p>
-                                            <b class="text-center text-danger">{{ message }}</b>
-                                        </div>
-                                    </div>
-    
-                                    <div class="col-12">
-                                        <div class="form-floating">
-                                            {{ form.name }}
-                                            <label for="id_name">Name</label>
-                                        </div>
-                                    </div>
-    
-                                    <div class="col-12">
-                                        <div class="form-floating">
-                                            {{ form.username }}
-                                            <label for="id_username">Username</label>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-12">
-                                        <div class="form-floating">
-                                            <div class="col-md-12">
-                                                <div class="radio" style="display: flex;">
-                                                    <div style="width: 50%; border: 1px solid #ced4da; padding: 10px; border-radius: 5px;">
-                                                        <label>
-                                                            <input type="radio" name="gender" value="male" id="gender-male" />
-                                                            <span>Male</span>
-                                                            <img src="{% static 'assets/img/man.png' %}" alt="" height="35px">
-                                                        </label>
-                                                    </div>
-                                                    <div style="width: 49%; border: 1px solid #ced4da; padding: 10px; border-radius: 5px; margin-left: 20px;">
-                                                        <label>
-                                                            <input type="radio" name="gender" value="female" id="gender-female" />
-                                                            <span>Female</span>
-                                                            <img class="text-right" src="{% static 'assets/img/female.png' %}" alt="" height="35px">
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="form-floating">
-                                            {{ form.country }}
-                                            <label for="id_country">Country</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="form-floating">
-                                            {{ form.state }}
-                                            <label for="id_state">State</label>
-                                        </div>
-                                    </div>
-    
-                                    <div class="col-12">
-                                        <div class="form-floating">
-                                            {{ form.email }}
-                                            <label for="id_email">Email</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-12">
-                                        <div class="form-floating">
-                                            {{ form.password }}
-                                            <label for="id_password">Password</label>
-                                        </div>
-                                    </div>
-    
-                                    <div class="col-12">
-                                        <div class="form-floating">
-                                            {{ form.confirm_password }}
-                                            <label for="id_confirm_password">Confirm Password</label>
-                                        </div>
-                                    </div>
-    
-                                    <div class="col-12">
-                                        <button class="btn btn-block btn-lg text-white w-100" type="submit" style="background-color: #17a2b8;">Create Account</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-
-                    <!-- Text -->
-                    <div class="text-center mt-8">
-                        <p>Already have an account? <a href="{% url 'customauth:user_login' %}">Sign in</a></p>
-                    </div>
+              <div class="col-12 col-md-6 col-xl-4">
+                <div class="form-floating">
+                  {{ form.name }}
+                  <label for="id_name">{% trans "Full Name" %}</label>
                 </div>
-            </div>
-            <!-- / .row -->
-        </div>
+              </div>
 
-        <!-- Scripts -->
-        <script src="{% static 'assets/js/vendor.js' %}"></script>
-        <script src="{% static 'assets/js/template.js' %}"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script>
-            $("#id_country").change(function () {
-            var url = $("#registerForm").attr("data-state-url");
-            var country = $(this).val();
-            $.ajax({
-                url: url,
-                data: {
-                    'country': country
-                },
-                success: function (data) {
-                    $("#id_state").html(data);
-                }
-            });
-        });
-        </script>
-    </body>
-</html>
+              <div class="col-12 col-md-6 col-xl-4">
+                <div class="form-floating">
+                  {{ form.username }}
+                  <label for="id_username">{% trans "Username" %}</label>
+                </div>
+              </div>
+
+              <div class="col-12 col-md-6 col-xl-4">
+                <div class="form-floating">
+                  {{ form.email }}
+                  <label for="id_email">{% trans "Email" %}</label>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <div class="radio d-flex justify-content-between">
+                  <div class="border p-2 rounded flex-fill text-center">
+                    <label>
+                      <input type="radio" name="gender" value="male" id="gender-male" />
+                      <span>{% trans "Male" %}</span>
+                      <img src="{% static 'assets/img/man.png' %}" alt="" height="35px" />
+                    </label>
+                  </div>
+                  <div class="border p-2 rounded flex-fill text-center ms-3">
+                    <label>
+                      <input type="radio" name="gender" value="female" id="gender-female" />
+                      <span>{% trans "Female" %}</span>
+                      <img src="{% static 'assets/img/female.png' %}" alt="" height="35px" />
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12 col-md-6 col-xl-4">
+                <div class="form-floating">
+                  {{ form.country }}
+                  <label for="id_country">{% trans "Country" %}</label>
+                </div>
+              </div>
+
+              <div class="col-12 col-md-6 col-xl-4">
+                <div class="form-floating">
+                  {{ form.state }}
+                  <label for="id_state">{% trans "State" %}</label>
+                </div>
+              </div>
+
+              <div class="col-12 col-md-6 col-xl-4">
+                <div class="form-floating">
+                  {{ form.password }}
+                  <label for="id_password">{% trans "Password" %}</label>
+                </div>
+              </div>
+
+              <div class="col-12 col-md-6 col-xl-4">
+                <div class="form-floating">
+                  {{ form.confirm_password }}
+                  <label for="id_confirm_password">{% trans "Confirm Password" %}</label>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <button class="btn btn-block btn-lg text-white w-100" type="submit" style="background-color:rgb(136, 23, 184);">{% trans "Create Account" %}</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Text -->
+      <div class="text-center mt-8">
+        <p>
+          {% trans 'Already have an account? ' %}<a href="{% url 'customauth:user_login' %}">{% trans 'Sign in' %}</a>
+        </p>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script>
+    $('#id_country').change(function () {
+      var url = $('#registerForm').attr('data-state-url')
+      var country = $(this).val()
+      $.ajax({
+        url: url,
+        data: {
+          country: country
+        },
+        success: function (data) {
+          $('#id_state').html(data)
+        }
+      })
+    })
+  </script>
+{% endblock %}

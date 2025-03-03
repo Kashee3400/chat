@@ -1,0 +1,6 @@
+{% load static chat_filters %}
+
+{% for message in messages %}
+  {% include 'chatroom/partials/_o_chat_bubble.html' with is_outgoing=request.user.email|is_sender:message.sender.email message=message %}
+{% endfor %}
+<div id="chat-vars" data-room-id="{{ room.id }}" data-receiver-id="{{ receiver_id }}" data-sender-profile="{{user_profile_url}}" data-receiver-profile="{{receiver_profile_url}}"></div>

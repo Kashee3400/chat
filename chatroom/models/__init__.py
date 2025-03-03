@@ -1,6 +1,18 @@
 from .category import (
-    Category, SubCategory, ChatRoomUser, RoomMessage,
-    DirectMessage, DirectmessageUser
+    Category,
+    SubCategory,
+    ChatRoomUser,
+    RoomMessage,
+    DirectMessage,
+    DirectMessageUser,
+    ChatRoomModel,
+    TextMessage,
+    CallLog,
+    MediaFile,
+    MediaSettings,
+    UserStatusModel,
+    BlockedUser,
+    ReportUserModel,
 )
 from .country import Country, State
 from .contact import Contact
@@ -13,7 +25,15 @@ __all__ = [
     State,
     ChatRoomUser,
     RoomMessage,
-    DirectmessageUser,
+    DirectMessageUser,
     DirectMessage,
     Contact,
+    ChatRoomModel,
+    TextMessage,
+    MediaFile,
+    MediaSettings,
+    CallLog,
+    BlockedUser,
+    UserStatusModel,
+    ReportUserModel,
 ]

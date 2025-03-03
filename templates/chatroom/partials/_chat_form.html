@@ -1,7 +1,8 @@
-<div class="chat-footer pb-3 pb-lg-7 position-absolute bottom-0 start-0">
+<div class="chat-footer pb-3 pb-lg-7 position-absolute bottom-0 start-0" style="display: none;">
+  
   <div class="dz-preview bg-dark" id="dz-preview-row" data-horizontal-scroll=""></div>
-
-  <form class="chat-form rounded-pill bg-dark" data-emoji-form="" id="chatForm" data-message-url="{{url}}">
+  
+  <form class="chat-form rounded-pill bg-dark" data-emoji-form="" id="chatForm">
     <div class="row align-items-center gx-0">
       <div class="col-auto">
         <a href="#" class="btn btn-icon btn-link text-body rounded-circle" id="dz-btn">
@@ -29,7 +30,7 @@
       </div>
 
       <div class="col-auto">
-        <button class="btn btn-icon btn-primary rounded-circle ms-5" id="chat-message-submit">
+        <button class="btn btn-icon btn-primary rounded-circle ms-5" type="button" id="chat-message-submit">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-send">
             <line x1="22" y1="2" x2="11" y2="13"></line>
             <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>

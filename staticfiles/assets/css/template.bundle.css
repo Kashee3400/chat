@@ -22664,11 +22664,11 @@ html {
 }
 
 .avatar-online::before {
-    background: #ffc107
+    background: green
 }
 
 .avatar-offline::before {
-    background: #adb5bd
+    background: red
 }
 
 .avatar-group {

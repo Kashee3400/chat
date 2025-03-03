@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% load static i18n %}
+    <!-- Head -->
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1, shrink-to-fit=no, viewport-fit=cover" />
+        <meta name="color-scheme" content="light dark" />
+        <title>{% block title %}{% endblock title %}</title>
+        <!-- Favicon -->
+        <link rel="shortcut icon" href="assets/img/favicon/favicon.ico" type="image/x-icon" />
+        <!-- Template CSS -->
+        <link class="css-lt" rel="stylesheet" href="{% static 'assets/css/template.bundle.css' %}" media="(prefers-color-scheme: light)" />
+        <link class="css-dk" rel="stylesheet" href="{% static 'assets/css/template.dark.bundle.css' %}" media="(prefers-color-scheme: dark)" />
+        {% block extra_css %}{% endblock extra_css %}
+        <!-- Theme mode -->
+        <script>
+            if (localStorage.getItem("color-scheme")) {
+                let scheme = localStorage.getItem("color-scheme");
+
+                const LTCSS = document.querySelectorAll("link[class=css-lt]");
+                const DKCSS = document.querySelectorAll("link[class=css-dk]");
+
+                [...LTCSS].forEach((link) => {
+                    link.media = scheme === "light" ? "all" : "not all";
+                });
+
+                [...DKCSS].forEach((link) => {
+                    link.media = scheme === "dark" ? "all" : "not all";
+                });
+            }
+        </script>
+    </head>
+
+    <body class="bg-light">
+        <div class="">
+            {% block content %}
+
+            {% endblock content %}
+            
+            <!-- / .row -->
+        </div>
+
+        <!-- Scripts -->
+        <script src="{% static 'assets/js/vendor.js' %}"></script>
+        <script src="{% static 'assets/js/template.js' %}"></script>
+        {% block extra_js %}{% endblock extra_js %}
+    </body>
+</html>

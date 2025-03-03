@@ -16,9 +16,14 @@ from channels.routing import ProtocolTypeRouter, URLRouter
 django.setup()
 
 from wannachat import routing  # noqa
+from decouple import config
 
+DEBUG = config('DEBUG', default=False, cast=bool)
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'wannachat.settings')
+if DEBUG:
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'wannachat.settings.local')
+else:
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'wannachat.settings.production')
 
 
 application = ProtocolTypeRouter({

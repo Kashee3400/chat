@@ -18,7 +18,6 @@ document.addEventListener("DOMContentLoaded", function () {
         chatSocket.onmessage = function (e) {
             const data = JSON.parse(e.data);
             if (data.message) {
-                console.log(data);
                 appendMessage(data);
                 scrollToBottom();
             } else {
@@ -49,6 +48,8 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         const data = JSON.stringify({
+            action: "send_message",
+            roomId:ROOM,
             message: message,
             email: userName,
             room: roomName,
@@ -61,8 +62,7 @@ document.addEventListener("DOMContentLoaded", function () {
         } else {
             connectWebSocket();
         }
-
-        messageInputDom.value = ""; // Clear input after sending
+        messageInputDom.value = "";
     }
 
     // Send Message on Button Click
@@ -87,24 +87,15 @@ document.addEventListener("DOMContentLoaded", function () {
             console.error("Chat messages container not found!");
             return;
         }
-    
-        console.log("Container height:", chatMessages.clientHeight);
-        console.log("Scroll height:", chatMessages.scrollHeight);
-    
         requestAnimationFrame(() => {
             chatMessages.scrollTo({
                 top: chatMessages.scrollHeight + 100, // Scroll to bottom with offset
                 behavior: 'smooth' // Optional: Smooth scrolling
             });
-            console.log("Scrolled to bottom");
         });
     }
     
 
-
-    // Auto-scroll when page loads
-    // scrollToBottom();
-    // Function to Append Message to Chat Window
     function appendMessage(data) {
         const chatMessages = document.querySelector("#chat-messages");
         const isSender = data.email === userEmail;
@@ -147,4 +138,16 @@ document.addEventListener("DOMContentLoaded", function () {
         chatMessages.appendChild(messageDiv);
     }
 
+    function markMessagesAsRead(chatPartnerId) {
+        if (chatSocket && chatSocket.readyState === WebSocket.OPEN) {
+            chatSocket.send(JSON.stringify({
+                type: "mark_read",
+                roomId:ROOM,
+                partner_id: chatPartnerId
+            }));
+        } else {
+            console.error("WebSocket not connected");
+        }
+    }
+    
 });

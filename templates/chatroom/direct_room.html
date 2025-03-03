@@ -18,7 +18,7 @@
     var userProfileUrl = "{{ user_profile_url }}";
     var receiverProfileUrl = "{{ receiver_profile_url }}";
     const CURRENT_USER_ID = "{{ request.user.pk }}"; 
-    
+    const ROOM = "{{room.id}}";
 </script>
   <script src="{% static 'chat/direct_chat.js' %}"></script>
 {% endblock extra_js %}

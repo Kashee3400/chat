@@ -4,39 +4,31 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib import messages
 from django.db.models import Q
-
 from chatroom.models import Category, Country, Contact
 from chatroom.forms import ContactForm
 from customauth.models import Profile
 
-
 class HomeView(View):
-    """ Home view """
+    """ Home view displaying categories based on selected country """
     template_name = 'home/home.html'
 
+    def _get_country_from_session(self, request):
+        """Retrieve the country from the session or fallback to default."""
+        country_name = request.session.get('country')
+        if country_name:
+            return Country.objects.filter(name=country_name).first()
+        return Country.objects.filter(pk=1).first()
+
+    def _get_category_list(self, country):
+        """Retrieve categories based on country selection."""
+        return Category.objects.filter(
+            Q(Q(country=country) & Q(is_active=True)) | Q(country__slug='world')
+        ).order_by('ordering')
+
     def get(self, request, *args, **kwargs):
-        print(request, 'dada')
-        try:
-            country_name = request.session['country']
-            print(country_name, '-------------------------------')
-            country = Country.objects.get(name=country_name)
-        except Exception as e:
-            print(e)
-            country = None
-        if country:
-            category_list = Category.objects.filter(
-                Q(Q(country=country) & Q(is_active=True)) | Q(country__slug='world')
-            ).order_by('ordering')
-        else:
-            try:
-                country = Country.objects.get(pk=1)
-                category_list = Category.objects.filter(
-                    Q(Q(country=country) & Q(is_active=True)) | Q(country__slug='world')
-                ).order_by('ordering')
-            except Country.DoesNotExist:
-                country = None
-                category_list = None
-        print(category_list)
+        country = self._get_country_from_session(request)
+        category_list = self._get_category_list(country) if country else None
+
         context = {
             'category_list': category_list,
             'selected_country': country,
@@ -45,36 +37,27 @@ class HomeView(View):
 
 
 class ChangeCountryView(View):
+    """ Handles country change and updates category listing """
+    template_name = 'home/rooms.html'
+
+    def _get_country_from_request(self, request):
+        """Retrieve country from request parameters and store it in session."""
+        country_name = request.GET.get('country')
+        if country_name:
+            request.session['country'] = country_name
+        return Country.objects.filter(name=country_name).first()
 
     def get(self, request, *args, **kwargs):
-        country = request.GET.get('country')
-        request.session['country'] = country
-        print(country, '------------------------------------------')
-        try:
-            country_name = request.session['country']
-            print(country_name, '-------------------------------')
-            country = Country.objects.get(name=country_name)
-        except Exception as e:
-            print(e)
-            country = None
-        if country:
-            category_list = Category.objects.filter(
-                Q(Q(country=country) & Q(is_active=True)) | Q(country__slug='world')
-            ).order_by('ordering')
-        else:
-            try:
-                country = Country.objects.get(pk=1)
-                category_list = Category.objects.filter(
-                    Q(Q(country=country) & Q(is_active=True)) | Q(country__slug='world')
-                ).order_by('ordering')
-            except Country.DoesNotExist:
-                country = None
-                category_list = None
+        country = self._get_country_from_request(request) or Country.objects.filter(pk=1).first()
+        category_list = Category.objects.filter(
+            Q(Q(country=country) & Q(is_active=True)) | Q(country__slug='world')
+        ).order_by('ordering') if country else None
+
         context = {
             'category_list': category_list,
             'selected_country': country,
         }
-        return render(request, 'home/rooms.html', context)
+        return render(request, self.template_name, context)
 
 
 class FAQPageView(TemplateView):

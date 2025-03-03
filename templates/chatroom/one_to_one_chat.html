@@ -1,0 +1,18 @@
+{% load static chat_filters %}
+<div class="d-flex flex-column h-100 position-relative chat-container">
+  
+  <!-- Chat: Header -->
+  <div class="chat-header border-bottom py-4 py-lg-7">
+    {% include 'chatroom/partials/_chat_header.html' %}
+  </div>
+  
+  <!-- Chat: Content -->
+  <div class="chat-body hide-scrollbar flex-1 h-100" style="background-image: url({{bg_image}}); background-size: cover; background-position: center;">
+    <div class="chat-body-inner">
+      <div class="py-4 py-lg-6 pb-5" id="chat-messages"></div>
+    </div>
+  </div>
+
+  <!-- Chat: Footer -->
+  {% include 'chatroom/partials/_chat_form.html' %}
+</div>
