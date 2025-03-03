@@ -16,6 +16,7 @@ DEBUG = config('DEBUG', default=False, cast=bool)
 # Application definition
 
 DJANGO_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -94,8 +95,6 @@ CHANNEL_LAYERS = {
 
 
 AUTH_USER_MODEL = 'customauth.User'
-
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators

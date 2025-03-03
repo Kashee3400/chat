@@ -13,6 +13,7 @@ from .category import (
     UserStatusModel,
     BlockedUser,
     ReportUserModel,
+    User
 )
 from .country import Country, State
 from .contact import Contact
@@ -36,4 +37,5 @@ __all__ = [
     BlockedUser,
     UserStatusModel,
     ReportUserModel,
+    User
 ]

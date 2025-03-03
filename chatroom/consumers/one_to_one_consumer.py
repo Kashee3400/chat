@@ -1,11 +1,10 @@
-import contextlib
 import json
 import logging
 from django.utils import timesince, timezone
 from asgiref.sync import sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
-from django.contrib.auth import get_user_model
 from chatroom.models import (
+    User,
     DirectMessageUser,
     ReportUserModel,
     BlockedUser,
@@ -19,8 +18,6 @@ from chatroom.models.category import (
     ChatRoomModel,
 )
 from django.db import transaction
-
-User = get_user_model()
 
 logger = logging.getLogger(__name__)
 

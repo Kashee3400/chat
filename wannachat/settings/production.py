@@ -21,10 +21,6 @@ DATABASES = {
 }
 
 
-if os.getenv('DISABLE_LOGGING', False):  # for celery in jenkins ci only
-    LOGGING_CONFIG = None
-
-
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
